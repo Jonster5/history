@@ -17,4 +17,23 @@ export class PlayerUtils {
 	get v(): Vec {
 		return this.sprite.v;
 	}
+
+	get x() {
+		return this.sprite.coords.x;
+	}
+	get y() {
+		return this.sprite.coords.y;
+	}
+	set x(v: number) {
+		this.sprite.coords.x = v;
+	}
+	set y(v: number) {
+		this.sprite.coords.y = v;
+	}
+	get hw() {
+		return this.sprite.halfWidth;
+	}
+	get hh() {
+		return this.sprite.halfHeight;
+	}
 }

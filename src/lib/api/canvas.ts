@@ -40,6 +40,11 @@ export class Canvas {
 
 		this.ar = window.innerWidth / window.innerHeight;
 
+		window.addEventListener(
+			'resize',
+			() => (this.ar = window.innerWidth / window.innerHeight)
+		);
+
 		this.w = size;
 		this.h = size / this.ar;
 

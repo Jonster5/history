@@ -54,6 +54,8 @@ export class Sprite
 
 		this.visible = true;
 		this.children = new Set();
+
+		console.log('created');
 	}
 
 	get x(): number {
@@ -181,7 +183,6 @@ export class Sprite
 			this.gy + this.halfHeight < -dm.h / 2
 		)
 			return;
-
 		ctx.save();
 
 		const renderX =

@@ -6,6 +6,8 @@ import barrier from '@assets/images/barrier1.png';
 import wood from '@assets/images/wood1.png';
 import bouncy from '@assets/images/bouncy1.png';
 import { Sprite } from '@api/sprite';
+import type Player from '@classes/player';
+import { Vec } from '@api/vec';
 
 export type LevelObjectType =
 	| 'grass'
@@ -28,14 +30,8 @@ export class Platform {
 		y: number,
 		w: number,
 		h: number,
-		type: LevelObjectType,
-		collidable?: boolean
+		type: LevelObjectType
 	) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-
 		const img = new Image(20, 20);
 		img.src =
 			type === 'grass'
@@ -55,15 +51,31 @@ export class Platform {
 				: barrier;
 
 		this.sprites = Array.from(
-			{ length: this.w * this.h },
+			{ length: w * h },
 			(s, i) =>
 				new Sprite(
 					[img],
 					20,
 					20,
-					this.x + (i % this.w),
-					this.y + (i % this.h)
+					(x + (i % w)) * 20 - 10,
+					(y + (i % h)) * 20 - 10
 				)
 		);
+
+		this.x = x * 20 - 10;
+		this.y = y * 20 - 10;
+		this.w = w * 20;
+		this.h = h * 20;
+	}
+	checkCollision(p: Player) {
+		if (p.x + p.hw > this.x && p.x - p.hw < this.x + this.w) {
+			if (p.y + p.hh > this.y && p.y - p.hh < this.y + this.h) {
+				p.v.y = 0;
+				p.y = this.y - p.hh - 10;
+				p.v.x * 0.9;
+				p.jump = false;
+			}
+		} else {
+		}
 	}
 }
