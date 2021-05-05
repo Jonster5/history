@@ -40,6 +40,8 @@ export interface DimensionProperties {
 
 	x: number;
 	y: number;
+	tx: number;
+	ty: number;
 	vx: number;
 	vy: number;
 	width: number;

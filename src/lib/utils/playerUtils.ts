@@ -30,6 +30,18 @@ export class PlayerUtils {
 	set y(v: number) {
 		this.sprite.coords.y = v;
 	}
+	get vx() {
+		return this.sprite.v.x;
+	}
+	get vy() {
+		return this.sprite.v.y;
+	}
+	set vx(v: number) {
+		this.sprite.v.x = v;
+	}
+	set vy(v: number) {
+		this.sprite.v.y = v;
+	}
 	get hw() {
 		return this.sprite.halfWidth;
 	}

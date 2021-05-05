@@ -2,11 +2,12 @@ import lvl from '@data/level2';
 import { Canvas } from '@api/canvas';
 import { Stage } from '@api/stage';
 import { GameProperties, GameUtils } from '@utils/gameUtils';
-import type { Platform } from '@utils/levelUtils';
 import { Sprite } from '@api/sprite';
 import { Rectangle } from '@api/rectangle';
 import Player from './player';
 import { Vec } from '@api/vec';
+import type { Checkpoint } from './checkpoints';
+import type { Platform } from './platforms';
 
 export default class extends GameUtils implements GameProperties {
 	canvas: Canvas;
@@ -15,6 +16,8 @@ export default class extends GameUtils implements GameProperties {
 	background: Sprite;
 
 	objects: Platform[];
+	checkpoints: Checkpoint[];
+	pause: boolean;
 
 	constructor(target: HTMLElement) {
 		super();
@@ -29,17 +32,31 @@ export default class extends GameUtils implements GameProperties {
 		this.background.coords.set(0, 0);
 
 		this.objects = [...lvl.objects];
+		this.checkpoints = [...lvl.checkpoints];
 
-		this.stage.add(this.background, ...lvl.getSprites());
+		this.stage.add(
+			this.background,
+			...lvl.getSprites(),
+			...lvl.getPoints(),
+			...lvl.getCheckpoints()
+		);
 
-		this.player = new Player(this.stage, -45 * 20 - 10, 18 * 20 - 10);
+		this.player = new Player(this.stage, this.checkpoints[0]);
 
 		this.canvas.update = () => {
-			this.player.update();
-			this.objects.forEach((o) => o.checkCollision(this.player));
+			if (this.pause) return;
+			this.player.update(this.objects, this.checkpoints);
+
+			if (this.player.y > this.stage.halfHeight) {
+				this.player.respawn();
+			}
 		};
 
+		this.canvas.UPS = 30;
+
 		this.canvas.start();
+
+		this.pause = false;
 	}
 
 	kill(): void {

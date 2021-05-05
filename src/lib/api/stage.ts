@@ -55,7 +55,18 @@ export class Stage implements DisplayProperties, DimensionProperties {
 	set y(v: number) {
 		this.coords.y = v;
 	}
-
+	get tx(): number {
+		return this.coords.x - this.w / 2;
+	}
+	set tx(v: number) {
+		this.coords.x = v + this.w / 2;
+	}
+	get ty(): number {
+		return this.coords.y - this.h / 2;
+	}
+	set ty(v: number) {
+		this.coords.y = v + this.h / 2;
+	}
 	get vx(): number {
 		return this.v.x;
 	}

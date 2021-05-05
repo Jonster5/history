@@ -136,12 +136,11 @@ export class Canvas {
 	}
 
 	step() {
-		this.render();
-		this.refreshLoop();
-		this.stop();
+		this.render(0, true);
+		this.refreshLoop(true);
 	}
 
-	private refreshLoop() {
+	private refreshLoop(step?: boolean) {
 		const now = performance.now();
 		while (this.rd.times.length > 0 && this.rd.times[0] <= now - 1000)
 			this.rd.times.shift();
@@ -149,7 +148,10 @@ export class Canvas {
 		this.rd.times.push(now);
 		this.rd.fps = this.rd.times.length;
 
-		this.fpschecker = requestAnimationFrame(this.refreshLoop.bind(this));
+		if (!step)
+			this.fpschecker = requestAnimationFrame(
+				this.refreshLoop.bind(this)
+			);
 	}
 
 	private getLagOffset(timestamp: number) {
@@ -188,7 +190,7 @@ export class Canvas {
 		return this.rd.lag / frameDuration;
 	}
 
-	private render(timestamp?: number) {
+	private render(timestamp?: number, step?: boolean) {
 		const lagOffset = this.getLagOffset(timestamp);
 
 		this.ctx.clearRect(0, 0, this.width, this.height);
@@ -205,6 +207,7 @@ export class Canvas {
 
 		this.ctx.restore();
 
-		this.animator = requestAnimationFrame(this.render.bind(this));
+		if (!step)
+			this.animator = requestAnimationFrame(this.render.bind(this));
 	}
 }

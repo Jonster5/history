@@ -21,52 +21,87 @@ export class Vec {
 		return new Vec(this.x, this.y);
 	}
 
-	set(x: number, y?: number): this {
-		this.x = x;
-		this.y = y ?? x;
+	print(): Vec {
+		console.info(this.x, this.y);
 		return this;
 	}
 
-	add(n: Vec | number): this {
-		if (typeof n === 'number') {
-			this.x += n;
-			this.y += n;
-		} else if (n instanceof Vec) {
-			this.x += n.x;
-			this.y += n.y;
+	set(x: Vec | number, y?: number): this {
+		if (typeof x === 'number') {
+			if (y) {
+				this.x = x;
+				this.y = y;
+			} else {
+				this.x = x;
+				this.y = x;
+			}
+		} else if (x instanceof Vec) {
+			this.x = x.x;
+			this.y = x.y;
 		}
 		return this;
 	}
 
-	subtract(n: Vec | number): this {
-		if (typeof n === 'number') {
-			this.x -= n;
-			this.y -= n;
-		} else if (n instanceof Vec) {
-			this.x -= n.x;
-			this.y -= n.y;
+	add(x: Vec | number, y?: number): this {
+		if (typeof x === 'number') {
+			if (y) {
+				this.x += x;
+				this.y += y;
+			} else {
+				this.x += x;
+				this.y += x;
+			}
+		} else if (x instanceof Vec) {
+			this.x += x.x;
+			this.y += x.y;
 		}
 		return this;
 	}
 
-	multiply(n: Vec | number): this {
-		if (typeof n === 'number') {
-			this.x *= n;
-			this.y *= n;
-		} else if (n instanceof Vec) {
-			this.x *= n.x;
-			this.y *= n.y;
+	subtract(x: Vec | number, y?: number): this {
+		if (typeof x === 'number') {
+			if (y) {
+				this.x -= x;
+				this.y -= y;
+			} else {
+				this.x -= x;
+				this.y -= x;
+			}
+		} else if (x instanceof Vec) {
+			this.x -= x.x;
+			this.y -= x.y;
 		}
 		return this;
 	}
 
-	divide(n: Vec | number): this {
-		if (typeof n === 'number') {
-			this.x /= n;
-			this.y /= n;
-		} else if (n instanceof Vec) {
-			this.x /= n.x;
-			this.y /= n.y;
+	multiply(x: Vec | number, y?: number): this {
+		if (typeof x === 'number') {
+			if (y) {
+				this.x *= x;
+				this.y *= y;
+			} else {
+				this.x *= x;
+				this.y *= x;
+			}
+		} else if (x instanceof Vec) {
+			this.x *= x.x;
+			this.y *= x.y;
+		}
+		return this;
+	}
+
+	divide(x: Vec | number, y?: number): this {
+		if (typeof x === 'number') {
+			if (y) {
+				this.x += x;
+				this.y += y;
+			} else {
+				this.x += x;
+				this.y += x;
+			}
+		} else if (x instanceof Vec) {
+			this.x /= x.x;
+			this.y /= x.y;
 		}
 		return this;
 	}
