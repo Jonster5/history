@@ -8,6 +8,8 @@ import bouncy from '@assets/images/bouncy1.png';
 import { Rectangle } from '@api/rectangle';
 import { Sprite } from '@api/sprite';
 import type { LevelObjectType } from '@utils/levelUtils';
+import type Player from './player';
+import { rectangleCollision } from '@api/collisions';
 
 export class Platform {
 	tx: number;
@@ -21,6 +23,8 @@ export class Platform {
 	halfWidth: number;
 	halfHeight: number;
 	sprites: Sprite[];
+
+	type: LevelObjectType;
 
 	points: Rectangle[];
 
@@ -49,6 +53,8 @@ export class Platform {
 				: type === 'bouncy'
 				? bouncy
 				: barrier;
+
+		this.type = type;
 
 		this.sprites = Array.from(
 			{ length: w * h },
@@ -85,5 +91,36 @@ export class Platform {
 		const midPoint = new Rectangle(5, 5, 'lime', 'none', this.x, this.y);
 
 		this.points = [xyPoint, whPoint, midPoint];
+	}
+	update(player: Player) {
+		const c = rectangleCollision(player.sprite, this, true);
+		switch (this.type) {
+			case 'grass':
+			case 'sand':
+			case 'wood':
+			case 'dirt':
+				if (c && c !== 'top') {
+					player.v.multiply(0.4);
+					player.jump = false;
+				}
+				break;
+			case 'stone':
+				if (c && (c === 'top' || c === 'right' || c === 'left')) {
+					player.v.multiply(0.2);
+				} else if (c && c === 'bottom') {
+					player.jump = false;
+					player.v.multiply(0.4);
+				}
+				break;
+			case 'barrier':
+				break;
+			case 'bouncy':
+				if (c) {
+					player.jump = true;
+					if (this.vx > 0) player.sprite.frames = [player.imgJR];
+					else player.sprite.frames = [player.imgJL];
+					player.v.multiply(0.4).subtract(0, 40);
+				}
+		}
 	}
 }

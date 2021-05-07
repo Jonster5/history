@@ -22,8 +22,8 @@ export default class extends GameUtils implements GameProperties {
 	constructor(target: HTMLElement) {
 		super();
 
-		// this.canvas = new Canvas(target, 750);
-		this.canvas = new Canvas(target, lvl.getSize());
+		this.canvas = new Canvas(target, 2000);
+		// this.canvas = new Canvas(target, lvl.getSize());
 		this.stage = new Stage(...lvl.getDims());
 
 		this.canvas.add(this.stage);
@@ -37,19 +37,44 @@ export default class extends GameUtils implements GameProperties {
 		this.stage.add(
 			this.background,
 			...lvl.getSprites(),
-			...lvl.getPoints(),
+			// ...lvl.getPoints(),
 			...lvl.getCheckpoints()
 		);
 
-		this.player = new Player(this.stage, this.checkpoints[0]);
+		this.player = new Player(
+			this.stage,
+			this.checkpoints[0],
+			lvl.pImgRight,
+			lvl.pImgLeft,
+			lvl.pImgJumpRight,
+			lvl.pImgJumpLeft
+		);
 
 		this.canvas.update = () => {
 			if (this.pause) return;
-			this.player.update(this.objects, this.checkpoints);
+			this.player.update(this.checkpoints);
+
+			this.objects.forEach((o) => o.update(this.player));
 
 			if (this.player.y > this.stage.halfHeight) {
 				this.player.respawn();
 			}
+
+			this.stage.x = -this.player.x;
+			this.stage.y = -this.player.y;
+
+			const w = this.stage.width;
+			const h = this.stage.height;
+			const c = this.canvas.width;
+			const r = this.canvas.ar;
+
+			const xOffset = (w - c) / 2;
+			const yOffset = (h * r - c) / (2 * r);
+
+			if (Math.abs(this.stage.x) > xOffset)
+				this.stage.setX(xOffset * Math.sign(this.stage.x));
+			if (Math.abs(this.stage.y) > yOffset)
+				this.stage.setY(yOffset * Math.sign(this.stage.y));
 		};
 
 		this.canvas.UPS = 30;

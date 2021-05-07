@@ -54,8 +54,6 @@ export class Sprite
 
 		this.visible = true;
 		this.children = new Set();
-
-		console.log('created');
 	}
 
 	get x(): number {

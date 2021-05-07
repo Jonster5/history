@@ -1,13 +1,12 @@
 import { Sprite } from '@api/sprite';
 import type { Stage } from '@api/stage';
 import { PlayerUtils, PlayerProperties } from '@utils/playerUtils';
-import playerimgsrc from '@assets/images/player.png';
 import { Vec } from '@api/vec';
 import { rectangleCollision, RectHitbox } from '@api/collisions';
 import type { Checkpoint } from './checkpoints';
 import type { Platform } from './platforms';
 
-export default class extends PlayerUtils implements PlayerProperties {
+export default class Player extends PlayerUtils implements PlayerProperties {
 	sprite: Sprite;
 	stage: Stage;
 
@@ -18,18 +17,37 @@ export default class extends PlayerUtils implements PlayerProperties {
 
 	checkpoint: Checkpoint;
 
-	constructor(stage: Stage, c: Checkpoint) {
+	imgR: HTMLImageElement[];
+	imgL: HTMLImageElement[];
+	imgJR: HTMLImageElement;
+	imgJL: HTMLImageElement;
+
+	constructor(
+		stage: Stage,
+		c: Checkpoint,
+		r: HTMLImageElement[],
+		l: HTMLImageElement[],
+		jr: HTMLImageElement,
+		jl: HTMLImageElement
+	) {
 		super();
 
 		this.stage = stage;
 
-		const img = new Image(15, 20);
-		img.src = playerimgsrc;
+		this.imgR = r;
+		this.imgL = l;
+		this.imgJR = jr;
+		this.imgJL = jl;
+
+		console.log(this.imgR);
+		console.log(this.imgL);
+		console.log(this.imgJR);
+		console.log(this.imgJL);
 
 		this.checkpoint = c;
 
 		this.sprite = new Sprite(
-			[img],
+			this.imgR,
 			15,
 			20,
 			this.checkpoint.x,
@@ -42,16 +60,20 @@ export default class extends PlayerUtils implements PlayerProperties {
 				case 'a':
 				case 'ArrowLeft':
 					this.left = true;
+					this.sprite.frames = this.imgL;
 					break;
 				case 'd':
 				case 'ArrowRight':
 					this.right = true;
+					this.sprite.frames = this.imgR;
 					break;
 				case 'w':
 				case 'ArrowUp':
-					if (!this.jump) this.v.subtract(new Vec(0, 12));
+					if (!this.jump) this.v.subtract(new Vec(0, 10));
 
 					this.jump = true;
+					if (this.vx > 0) this.sprite.frames = [this.imgJR];
+					else this.sprite.frames = [this.imgJL];
 					break;
 				case ' ':
 					this.shoot = true;
@@ -76,7 +98,7 @@ export default class extends PlayerUtils implements PlayerProperties {
 		});
 	}
 
-	update(objects: Platform[], checkpoints: Checkpoint[]) {
+	update(checkpoints: Checkpoint[]) {
 		this.v.add(new Vec(0, 1));
 
 		if (this.right) {
@@ -86,26 +108,10 @@ export default class extends PlayerUtils implements PlayerProperties {
 			this.v.add(new Vec(-2, 0));
 		}
 
-		this.vx = Math.abs(this.v.x) > 5 ? 5 * Math.sign(this.v.x) : this.v.x;
+		this.vx = Math.abs(this.vx) <= 5 ? this.vx : 5 * Math.sign(this.vx);
+		this.vy = Math.abs(this.vy) <= 15 ? this.vy : 15 * Math.sign(this.vy);
 
 		this.c.add(this.v);
-
-		objects.forEach((o) => {
-			switch (
-				rectangleCollision(
-					this.sprite as RectHitbox,
-					o as RectHitbox,
-					true
-				)
-			) {
-				case 'bottom':
-				case 'right':
-				case 'left':
-				case 'any':
-					this.jump = false;
-					this.v.multiply(0.5);
-			}
-		});
 
 		checkpoints.forEach((c) => {
 			if (
