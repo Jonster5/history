@@ -5,6 +5,7 @@ import { Vec } from '@api/vec';
 import { rectangleCollision, RectHitbox } from '@api/collisions';
 import type { Checkpoint } from './checkpoints';
 import type { Platform } from './platforms';
+import { writable, Writable } from 'svelte/store';
 
 export default class Player extends PlayerUtils implements PlayerProperties {
 	sprite: Sprite;
@@ -17,6 +18,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 
 	checkpoint: Checkpoint;
 
+	text: Writable<string>;
+
 	imgR: HTMLImageElement[];
 	imgL: HTMLImageElement[];
 	imgJR: HTMLImageElement;
@@ -24,11 +27,12 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 
 	constructor(
 		stage: Stage,
-		c: Checkpoint,
+		c: { x: number; y: number },
 		r: HTMLImageElement[],
 		l: HTMLImageElement[],
 		jr: HTMLImageElement,
-		jl: HTMLImageElement
+		jl: HTMLImageElement,
+		cp: Checkpoint
 	) {
 		super();
 
@@ -39,20 +43,11 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		this.imgJR = jr;
 		this.imgJL = jl;
 
-		console.log(this.imgR);
-		console.log(this.imgL);
-		console.log(this.imgJR);
-		console.log(this.imgJL);
+		this.checkpoint = cp;
+		this.checkpoint.sprite.color = '#faef7d';
+		this.text = writable('');
 
-		this.checkpoint = c;
-
-		this.sprite = new Sprite(
-			this.imgR,
-			15,
-			20,
-			this.checkpoint.x,
-			this.checkpoint.y
-		);
+		this.sprite = new Sprite(this.imgR, 15, 20, c.x, c.y);
 		this.stage.add(this.sprite);
 
 		window.addEventListener('keydown', (e) => {
@@ -61,15 +56,21 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 				case 'ArrowLeft':
 					this.left = true;
 					this.sprite.frames = this.imgL;
+					this.sprite.start(200);
 					break;
 				case 'd':
 				case 'ArrowRight':
 					this.right = true;
 					this.sprite.frames = this.imgR;
+					this.sprite.start(200);
 					break;
 				case 'w':
 				case 'ArrowUp':
-					if (!this.jump) this.v.subtract(new Vec(0, 10));
+					if (!this.jump) {
+						this.sprite.stop();
+						this.sprite.frame = 0;
+						this.v.subtract(new Vec(0, 10));
+					}
 
 					this.jump = true;
 					if (this.vx > 0) this.sprite.frames = [this.imgJR];
@@ -86,10 +87,12 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 				case 'a':
 				case 'ArrowLeft':
 					this.left = false;
+					this.sprite.stop();
 					break;
 				case 'd':
 				case 'ArrowRight':
 					this.right = false;
+					this.sprite.stop();
 					break;
 				case ' ':
 					this.shoot = false;
@@ -113,6 +116,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 
 		this.c.add(this.v);
 
+		let L = false;
+
 		checkpoints.forEach((c) => {
 			if (
 				rectangleCollision(
@@ -121,15 +126,23 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 					false
 				)
 			) {
-				this.checkpoint.sprite.color = '#faef7daa';
-				this.checkpoint = c;
-				this.checkpoint.sprite.color = '#faef7d';
+				this.text.set(c.text);
+				L = true;
+				if (c !== this.checkpoint) {
+					this.checkpoint.sprite.color = '#faef7daa';
+					this.checkpoint = c;
+					this.checkpoint.sprite.color = '#faef7d';
+				}
 			}
 		});
+
+		if (!L) this.text.set(null);
 	}
-	respawn() {
+	respawn(stage: Stage) {
 		this.sprite.setX(this.checkpoint.x);
 		this.sprite.setY(this.checkpoint.y);
+		this.stage.setX(-this.x);
+		this.stage.setY(-this.y);
 		this.v.set(0, 0);
 	}
 }

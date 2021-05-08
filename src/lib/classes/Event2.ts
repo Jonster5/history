@@ -22,7 +22,7 @@ export default class extends GameUtils implements GameProperties {
 	constructor(target: HTMLElement) {
 		super();
 
-		this.canvas = new Canvas(target, 2000);
+		this.canvas = new Canvas(target, 600);
 		// this.canvas = new Canvas(target, lvl.getSize());
 		this.stage = new Stage(...lvl.getDims());
 
@@ -37,17 +37,17 @@ export default class extends GameUtils implements GameProperties {
 		this.stage.add(
 			this.background,
 			...lvl.getSprites(),
-			// ...lvl.getPoints(),
 			...lvl.getCheckpoints()
 		);
 
 		this.player = new Player(
 			this.stage,
-			this.checkpoints[0],
+			{ x: -48 * 20 + 10, y: 19 * 20 + 10 },
 			lvl.pImgRight,
 			lvl.pImgLeft,
 			lvl.pImgJumpRight,
-			lvl.pImgJumpLeft
+			lvl.pImgJumpLeft,
+			lvl.checkpoints[0]
 		);
 
 		this.canvas.update = () => {
@@ -57,7 +57,7 @@ export default class extends GameUtils implements GameProperties {
 			this.objects.forEach((o) => o.update(this.player));
 
 			if (this.player.y > this.stage.halfHeight) {
-				this.player.respawn();
+				this.player.respawn(this.stage);
 			}
 
 			this.stage.x = -this.player.x;
@@ -76,6 +76,23 @@ export default class extends GameUtils implements GameProperties {
 			if (Math.abs(this.stage.y) > yOffset)
 				this.stage.setY(yOffset * Math.sign(this.stage.y));
 		};
+
+		window.addEventListener('keydown', (e) => {
+			if (e.key === 'v') {
+				this.player.checkpoint = this.checkpoints[
+					this.checkpoints.length - 1
+				];
+				this.player.respawn(this.stage);
+			} else if (e.key === '1') {
+				this.stage.add(...lvl.getPoints());
+			} else if (e.key === '2') {
+				this.stage.remove(...lvl.getPoints());
+			} else if (e.key === '3') {
+				this.canvas.size(lvl.getSize());
+			} else if (e.key === '4') {
+				this.canvas.size(600);
+			}
+		});
 
 		this.canvas.UPS = 30;
 

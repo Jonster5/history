@@ -1,5 +1,6 @@
 import svelte from '@sveltejs/vite-plugin-svelte';
 import alias from '@rollup/plugin-alias';
+import json from '@rollup/plugin-json';
 import path from 'path';
 
 const projectRootDir = path.resolve(__dirname);
@@ -10,6 +11,7 @@ const config = {
 	// },
 	plugins: [
 		svelte(),
+		json(),
 		alias({
 			entries: [
 				{

@@ -102,14 +102,24 @@ export class Platform {
 				if (c && c !== 'top') {
 					player.v.multiply(0.4);
 					player.jump = false;
+					player.sprite.frame = 0;
+					player.sprite.stop();
+					if (this.vx > 0) player.sprite.frames = player.imgR;
+					else player.sprite.frames = player.imgL;
 				}
 				break;
 			case 'stone':
-				if (c && (c === 'top' || c === 'right' || c === 'left')) {
+				if (c && (c === 'right' || c === 'left')) {
+					player.sprite.frame = 0;
+					player.sprite.stop();
 					player.v.multiply(0.2);
-				} else if (c && c === 'bottom') {
+				} else if (c && (c === 'top' || c === 'bottom')) {
 					player.jump = false;
 					player.v.multiply(0.4);
+					player.sprite.frame = 0;
+					player.sprite.stop();
+					if (this.vx > 0) player.sprite.frames = player.imgR;
+					else player.sprite.frames = player.imgL;
 				}
 				break;
 			case 'barrier':
@@ -117,6 +127,8 @@ export class Platform {
 			case 'bouncy':
 				if (c) {
 					player.jump = true;
+					player.sprite.frame = 0;
+					player.sprite.stop();
 					if (this.vx > 0) player.sprite.frames = [player.imgJR];
 					else player.sprite.frames = [player.imgJL];
 					player.v.multiply(0.4).subtract(0, 40);

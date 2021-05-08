@@ -1,8 +1,15 @@
 import r1 from '@assets/images/french-right1.png';
-import p from '@assets/images/player.png';
+import r2 from '@assets/images/french-right2.png';
+import r3 from '@assets/images/french-right3.png';
+import rjump from '@assets/images/french-right-jump.png';
+import l1 from '@assets/images/french-left1.png';
+import l2 from '@assets/images/french-left2.png';
+import l3 from '@assets/images/french-left3.png';
+import ljump from '@assets/images/french-left-jump.png';
 import type { Rectangle } from '@api/rectangle';
 import type { Sprite } from '@api/sprite';
 import bgSrc from '@assets/images/bg1.png';
+import data from './blitz.json';
 import { Checkpoint } from '@classes/checkpoints';
 import { Platform } from '@classes/platforms';
 
@@ -30,36 +37,51 @@ const objects = [
 	new Platform(-20, 15, 10, 1, 'wood'),
 	new Platform(-11, 14, 1, 1, 'bouncy'),
 	new Platform(-9, 9, 4, 1, 'stone'),
+	new Platform(-15, 7, 4, 1, 'stone'),
+	new Platform(-15, 6, 1, 1, 'bouncy'),
+	new Platform(-17, -1, 1, 3, 'wood'),
+	new Platform(-17, -2, 1, 1, 'bouncy'),
+	new Platform(-10, -4, 1, 1, 'wood'),
+	new Platform(-10, -5, 6, 1, 'wood'),
+	new Platform(1, 4, 1, 1, 'wood'),
+	new Platform(1, 3, 1, 1, 'bouncy'),
+	new Platform(7, 4, 1, 1, 'wood'),
+	new Platform(7, 3, 1, 1, 'bouncy'),
+	new Platform(11, 0, 5, 1, 'dirt'),
+	new Platform(18, -3, 7, 7, 'stone'),
 ];
 
 const checkpoints = [
-	new Checkpoint(-46, 19),
-	new Checkpoint(-43, 10),
-	new Checkpoint(-41, 1),
-	new Checkpoint(-26, 1),
-	new Checkpoint(-16, 14),
+	new Checkpoint(-46, 19, data.a),
+	new Checkpoint(-43, 10, data.b),
+	new Checkpoint(-41, 1, data.c),
+	new Checkpoint(-26, 1, data.d),
+	new Checkpoint(-16, 14, data.e),
+	new Checkpoint(-6, -6, data.f),
+	new Checkpoint(14, -1, ''),
 ];
 
-const pImgRight = [r1].map((x) => {
+const pImgRight = [r1, r2, r3].map((x) => {
 	const l = new Image(15, 20);
 	l.src = x;
 	return l;
 });
 
-const pImgLeft = [r1].map((x) => {
+const pImgLeft = [l1, l2, l3].map((x) => {
 	const l = new Image(15, 20);
 	l.src = x;
 	return l;
 });
 
 const pImgJumpRight = new Image(15, 20);
-pImgJumpRight.src = p;
+pImgJumpRight.src = rjump;
 
 const pImgJumpLeft = new Image(15, 20);
-pImgJumpLeft.src = p;
+pImgJumpLeft.src = ljump;
 
 const background = new Image(2000, 1000);
 background.src = bgSrc;
+2;
 
 export default {
 	width,

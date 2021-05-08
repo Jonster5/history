@@ -168,10 +168,11 @@ export class Sprite
 	}
 
 	start(delay: number) {
-		this.frameShifter = (setInterval(() => {
-			this.frame++;
-			if (this.frame >= this.frames.length) this.frame = 0;
-		}, delay) as unknown) as number;
+		if (!this.frameShifter)
+			this.frameShifter = (setInterval(() => {
+				this.frame++;
+				if (this.frame >= this.frames.length) this.frame = 0;
+			}, delay) as unknown) as number;
 	}
 
 	stop() {
@@ -212,13 +213,23 @@ export class Sprite
 		ctx.translate(renderX, renderY);
 		ctx.rotate(renderR);
 
-		ctx.drawImage(
-			this.frames[this.frame],
-			-this.halfWidth,
-			-this.halfHeight,
-			this.width,
-			this.height
-		);
+		try {
+			ctx.drawImage(
+				this.frames[this.frame],
+				-this.halfWidth,
+				-this.halfHeight,
+				this.width,
+				this.height
+			);
+		} catch {
+			ctx.drawImage(
+				this.frames[0],
+				-this.halfWidth,
+				-this.halfHeight,
+				this.width,
+				this.height
+			);
+		}
 
 		if (this.children.size > 0)
 			for (let child of this.children) child.render(ctx, lagOffset, dm);
