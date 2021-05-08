@@ -28,6 +28,9 @@ export class Sprite
 	parent: any;
 	children: Set<any>;
 
+	filter: string;
+	filterTimeout: number;
+
 	constructor(
 		frames: HTMLImageElement[],
 		width: number,
@@ -54,6 +57,9 @@ export class Sprite
 
 		this.visible = true;
 		this.children = new Set();
+
+		this.filter = '';
+		this.filterTimeout = null;
 	}
 
 	get x(): number {
@@ -180,6 +186,17 @@ export class Sprite
 		this.frameShifter = null;
 	}
 
+	setFilter(f?: string, delay?: number) {
+		this.filter = f ?? '';
+		if (delay) {
+			if (this.frameShifter) clearTimeout(this.frameShifter);
+			this.frameShifter = (setTimeout(
+				() => this.setFilter(),
+				delay
+			) as unknown) as number;
+		}
+	}
+
 	render(
 		ctx: CanvasRenderingContext2D,
 		lagOffset: number,
@@ -213,6 +230,7 @@ export class Sprite
 		ctx.translate(renderX, renderY);
 		ctx.rotate(renderR);
 
+		ctx.filter = this.filter;
 		try {
 			ctx.drawImage(
 				this.frames[this.frame],

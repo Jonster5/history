@@ -8,6 +8,10 @@ import Player from './player';
 import { Vec } from '@api/vec';
 import type { Checkpoint } from './checkpoints';
 import type { Platform } from './platforms';
+import { rectangleCollision } from '@api/collisions';
+import type { Objective } from './objective';
+import type { SaveData } from '@data/data';
+import { writable, Writable } from 'svelte/store';
 
 export default class extends GameUtils implements GameProperties {
 	canvas: Canvas;
@@ -18,6 +22,9 @@ export default class extends GameUtils implements GameProperties {
 	objects: Platform[];
 	checkpoints: Checkpoint[];
 	pause: boolean;
+	objective: Objective;
+
+	gameOver: Writable<boolean>;
 
 	constructor(target: HTMLElement) {
 		super();
@@ -33,11 +40,15 @@ export default class extends GameUtils implements GameProperties {
 
 		this.objects = [...lvl.objects];
 		this.checkpoints = [...lvl.checkpoints];
+		this.objective = lvl.exit;
+
+		this.gameOver = writable(false);
 
 		this.stage.add(
 			this.background,
 			...lvl.getSprites(),
-			...lvl.getCheckpoints()
+			...lvl.getCheckpoints(),
+			this.objective.sprite
 		);
 
 		this.player = new Player(
@@ -56,8 +67,27 @@ export default class extends GameUtils implements GameProperties {
 
 			this.objects.forEach((o) => o.update(this.player));
 
+			if (
+				rectangleCollision(
+					this.player.sprite,
+					this.objective.sprite,
+					false
+				)
+			) {
+				const c: SaveData = JSON.parse(localStorage.getItem('game'));
+
+				c.e2 = true;
+
+				localStorage.setItem('game', JSON.stringify(c));
+				this.gameOver.set(true);
+			}
+
 			if (this.player.y > this.stage.halfHeight) {
 				this.player.respawn(this.stage);
+				this.player.sprite.setFilter('brightness(500%)');
+				setTimeout(() => {
+					this.player.sprite.setFilter();
+				}, 200);
 			}
 
 			this.stage.x = -this.player.x;
@@ -91,6 +121,11 @@ export default class extends GameUtils implements GameProperties {
 				this.canvas.size(lvl.getSize());
 			} else if (e.key === '4') {
 				this.canvas.size(600);
+			} else if (e.key === '5') {
+				this.player.sprite.setFilter('brightness(500%)');
+				setTimeout(() => {
+					this.player.sprite.setFilter();
+				}, 200);
 			}
 		});
 

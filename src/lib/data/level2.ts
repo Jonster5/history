@@ -6,12 +6,14 @@ import l1 from '@assets/images/french-left1.png';
 import l2 from '@assets/images/french-left2.png';
 import l3 from '@assets/images/french-left3.png';
 import ljump from '@assets/images/french-left-jump.png';
+import eSrc from '@assets/images/door.png';
 import type { Rectangle } from '@api/rectangle';
 import type { Sprite } from '@api/sprite';
 import bgSrc from '@assets/images/bg1.png';
 import data from './blitz.json';
 import { Checkpoint } from '@classes/checkpoints';
 import { Platform } from '@classes/platforms';
+import { Objective } from '@classes/objective';
 
 const width = 100,
 	height = 50;
@@ -48,7 +50,14 @@ const objects = [
 	new Platform(7, 4, 1, 1, 'wood'),
 	new Platform(7, 3, 1, 1, 'bouncy'),
 	new Platform(11, 0, 5, 1, 'dirt'),
-	new Platform(18, -3, 7, 7, 'stone'),
+	new Platform(18, 0, 2, 2, 'wood'),
+	new Platform(22, 1, 2, 2, 'wood'),
+	new Platform(26, -1, 2, 2, 'wood'),
+	new Platform(30, 1, 2, 2, 'wood'),
+	new Platform(40, -13, 10, 38, 'stone'),
+	new Platform(39, -1, 1, 2, 'stone'),
+	new Platform(34, 2, 6, 1, 'stone'),
+	new Platform(38, 3, 2, 2, 'stone'),
 ];
 
 const checkpoints = [
@@ -58,8 +67,14 @@ const checkpoints = [
 	new Checkpoint(-26, 1, data.d),
 	new Checkpoint(-16, 14, data.e),
 	new Checkpoint(-6, -6, data.f),
-	new Checkpoint(14, -1, ''),
+	new Checkpoint(14, -1, data.g),
+	new Checkpoint(35, 1, data.h),
 ];
+
+const eImg = new Image(20, 20);
+eImg.src = eSrc;
+
+const exit = new Objective(39, 1, eImg);
 
 const pImgRight = [r1, r2, r3].map((x) => {
 	const l = new Image(15, 20);
@@ -90,6 +105,7 @@ export default {
 	background,
 	objects,
 	checkpoints,
+	exit,
 
 	pImgRight,
 	pImgJumpRight,

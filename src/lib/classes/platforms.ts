@@ -64,7 +64,7 @@ export class Platform {
 					20,
 					20,
 					(x + (i % w)) * 20 + 10,
-					(y + (i % h)) * 20 + 10
+					(y + Math.floor((1 / w) * i)) * 20 + 10
 				)
 		);
 

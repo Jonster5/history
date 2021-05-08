@@ -19,7 +19,7 @@
 
 		color: white;
 
-		font-family: 'Goblin One', cursive;
+		font-family: 'Trispace', monospace;
 		padding: 1vh;
 
 		box-sizing: border-box;
