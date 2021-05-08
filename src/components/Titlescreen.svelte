@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import mSrc from '@assets/music/enterhallownest.mp3';
 
 	const dispatch = createEventDispatcher();
 
@@ -8,7 +9,20 @@
 			screen,
 		});
 	};
+
+	let music: HTMLAudioElement;
+
+	onMount(() => {
+		music.play();
+		music.volume = 0.01;
+	});
 </script>
+
+<audio bind:this={music} hidden loop>
+	<source src={mSrc} type="audio/ogg" />
+	Your browser does not support the audio element.
+	<track kind="captions" />
+</audio>
 
 <main>
 	<div class="title">WWII Game</div>

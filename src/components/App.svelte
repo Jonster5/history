@@ -4,8 +4,8 @@
 	import { cubicOut } from 'svelte/easing';
 	import Event1 from './Event1.svelte';
 	import Event2 from './Event2.svelte';
-	import Event3 from './Event3.svelte';
-	import Event4 from './Event4.svelte';
+	import Event3 from './Event4.svelte';
+	import Event4 from './Event3.svelte';
 	import Event5 from './Event5.svelte';
 	import Event6 from './Event6.svelte';
 	import Event7 from './Event7.svelte';

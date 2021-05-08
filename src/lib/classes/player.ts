@@ -56,13 +56,13 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 				case 'ArrowLeft':
 					this.left = true;
 					this.sprite.frames = this.imgL;
-					this.sprite.start(200);
+					this.sprite.start(100);
 					break;
 				case 'd':
 				case 'ArrowRight':
 					this.right = true;
 					this.sprite.frames = this.imgR;
-					this.sprite.start(200);
+					this.sprite.start(100);
 					break;
 				case 'w':
 				case 'ArrowUp':
@@ -144,5 +144,10 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		this.stage.setX(-this.x);
 		this.stage.setY(-this.y);
 		this.v.set(0, 0);
+
+		this.sprite.setFilter('brightness(500%)');
+		setTimeout(() => {
+			this.sprite.setFilter();
+		}, 500);
 	}
 }

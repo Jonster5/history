@@ -1,7 +1,6 @@
 import type { Sprite } from '@api/sprite';
 import type { Stage } from '@api/stage';
 import type { Vec } from '@api/vec';
-import type { Game } from '@classes/Event1';
 
 export interface PlayerProperties {
 	sprite: Sprite;

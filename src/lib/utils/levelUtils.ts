@@ -5,4 +5,5 @@ export type LevelObjectType =
 	| 'sand'
 	| 'wood'
 	| 'barrier'
-	| 'bouncy';
+	| 'bouncy'
+	| 'steel';

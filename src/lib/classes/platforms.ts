@@ -5,6 +5,7 @@ import sand from '@assets/images/sand1.png';
 import barrier from '@assets/images/barrier1.png';
 import wood from '@assets/images/wood1.png';
 import bouncy from '@assets/images/bouncy1.png';
+import steel from '@assets/images/steel1.png';
 import { Rectangle } from '@api/rectangle';
 import { Sprite } from '@api/sprite';
 import type { LevelObjectType } from '@utils/levelUtils';
@@ -52,6 +53,8 @@ export class Platform {
 				? barrier
 				: type === 'bouncy'
 				? bouncy
+				: type === 'steel'
+				? steel
 				: barrier;
 
 		this.type = type;
@@ -98,28 +101,45 @@ export class Platform {
 			case 'grass':
 			case 'sand':
 			case 'wood':
+			case 'steel':
 			case 'dirt':
 				if (c && c !== 'top') {
 					player.v.multiply(0.4);
+					if (player.jump) {
+						player.sprite.stop();
+						player.v.multiply(0.2);
+					}
 					player.jump = false;
 					player.sprite.frame = 0;
 					player.sprite.stop();
-					if (this.vx > 0) player.sprite.frames = player.imgR;
-					else player.sprite.frames = player.imgL;
+					if (player.right && !player.left) {
+						player.sprite.frames = player.imgR;
+						player.sprite.start(100);
+					}
+					if (player.left && !player.right) {
+						player.sprite.frames = player.imgL;
+						player.sprite.start(100);
+					}
 				}
 				break;
 			case 'stone':
 				if (c && (c === 'right' || c === 'left')) {
 					player.sprite.frame = 0;
-					player.sprite.stop();
-					player.v.multiply(0.2);
 				} else if (c && (c === 'top' || c === 'bottom')) {
+					if (player.jump) {
+						player.sprite.stop();
+						player.v.multiply(0.2);
+					}
 					player.jump = false;
 					player.v.multiply(0.4);
-					player.sprite.frame = 0;
-					player.sprite.stop();
-					if (this.vx > 0) player.sprite.frames = player.imgR;
-					else player.sprite.frames = player.imgL;
+					if (player.right && !player.left) {
+						player.sprite.frames = player.imgR;
+						player.sprite.start(100);
+					}
+					if (player.left && !player.right) {
+						player.sprite.frames = player.imgL;
+						player.sprite.start(100);
+					}
 				}
 				break;
 			case 'barrier':
@@ -129,8 +149,13 @@ export class Platform {
 					player.jump = true;
 					player.sprite.frame = 0;
 					player.sprite.stop();
-					if (this.vx > 0) player.sprite.frames = [player.imgJR];
-					else player.sprite.frames = [player.imgJL];
+					if (player.vx > 0) {
+						player.sprite.frames = player.imgR;
+						player.sprite.start(100);
+					} else {
+						player.sprite.frames = player.imgL;
+						player.sprite.start(100);
+					}
 					player.v.multiply(0.4).subtract(0, 40);
 				}
 		}
