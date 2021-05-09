@@ -11,6 +11,7 @@
 	import Event7 from './Event7.svelte';
 	import LevelSelect from './LevelSelect.svelte';
 	import type { SaveData } from '@data/data';
+	import Credits from './Credits.svelte';
 
 	if (!localStorage.getItem('game')) {
 		localStorage.setItem(
@@ -30,6 +31,7 @@
 	let screen:
 		| 'title'
 		| 'play'
+		| 'credits'
 		| 'e1'
 		| 'e2'
 		| 'e3'
@@ -51,7 +53,19 @@
 		<Titlescreen on:click={click} />
 	</div>
 {:else if screen === 'play'}
-	<LevelSelect on:click={click} />
+	<div
+		in:fly={{ easing: cubicOut, delay: 250, duration: 250, y: 100 }}
+		out:fly={{ easing: cubicOut, duration: 250, y: 100 }}
+	>
+		<LevelSelect on:click={click} />
+	</div>
+{:else if screen === 'credits'}
+	<div
+		in:fly={{ easing: cubicOut, delay: 250, duration: 250, y: 100 }}
+		out:fly={{ easing: cubicOut, duration: 250, y: 100 }}
+	>
+		<Credits on:click={click} />
+	</div>
 {:else if screen === 'e1'}
 	<div
 		in:fly={{ easing: cubicOut, delay: 250, duration: 250, y: -100 }}

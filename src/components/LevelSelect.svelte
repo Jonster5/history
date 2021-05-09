@@ -29,9 +29,9 @@
 </audio>
 
 <main>
-	<Backbutton target="title" />
+	<Backbutton target="title" on:click />
 
-	<h1>Select Level</h1>
+	<h1>Select Scene</h1>
 	<div>
 		<button class={completed.e1 ? 'seen' : ''} on:click={() => click('e1')}
 			>Formation of the Axis Powers
@@ -61,7 +61,11 @@
 	@import '../styles/vars';
 
 	main {
-		background: black;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(#00000055, #000000ff),
+			url('/images/select_screen.png');
+		background-size: cover;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -79,6 +83,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			background: #000000aa;
 
 			button {
 				color: white;

@@ -28,7 +28,7 @@
 	<div class="title">WWII Game</div>
 	<div class="version">V0.1</div>
 	<div class="button" on:click={() => click('play')}>Play</div>
-	<div class="button" on:click={() => click('more')}>Settings?</div>
+	<div class="button" on:click={() => click('credits')}>Credits</div>
 </main>
 
 <style lang="scss">

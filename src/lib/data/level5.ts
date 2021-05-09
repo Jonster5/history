@@ -14,7 +14,6 @@ import bgSrc from '@assets/images/bg2.png';
 import data from './dday.json';
 import { Checkpoint } from '@classes/checkpoints';
 import { Platform } from '@classes/platforms';
-import { Objective } from '@classes/objective';
 
 const width = 100,
 	height = 50;
@@ -28,12 +27,14 @@ const objects = [
 	new Platform(-17, 19, 7, 1, 'sand'),
 	new Platform(-12, 18, 10, 1, 'sand'),
 
+	new Platform(-11, 17, 1, 1, 'bouncy'),
 	new Platform(-7, 17, 2, 1, 'steel'),
 	new Platform(-8, 15, 1, 2, 'steel'),
 	new Platform(-9, 15, 1, 1, 'steel'),
 
 	new Platform(-3, 17, 6, 1, 'sand'),
 
+	new Platform(-6, 16, 1, 1, 'bouncy'),
 	new Platform(0, 16, 2, 1, 'steel'),
 	new Platform(-2, 15, 2, 1, 'steel'),
 	new Platform(-1, 14, 1, 1, 'steel'),
@@ -59,7 +60,14 @@ const objects = [
 	new Platform(37, -4, 1, 6, 'barrier'),
 ];
 
-const checkpoints = [new Checkpoint(-25, 18, '')];
+const checkpoints = [
+	new Checkpoint(-25, 18, data.a),
+	new Checkpoint(-8, 14, data.b),
+	new Checkpoint(-1, 13, data.c),
+	new Checkpoint(6, 13, data.d),
+	new Checkpoint(13, 11, data.e),
+	new Checkpoint(19, 10, data.f),
+];
 
 const pImgRight = [r1].map((x) => {
 	const l = new Image(15, 20);

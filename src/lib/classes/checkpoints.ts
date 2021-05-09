@@ -10,14 +10,7 @@ export class Checkpoint {
 	constructor(x: number, y: number, text: string) {
 		this.x = x * 20 + 10;
 		this.y = y * 20 + 10;
-		this.sprite = new Rectangle(
-			15,
-			15,
-			'#faef7daa',
-			'none',
-			this.x,
-			this.y
-		);
+		this.sprite = new Rectangle(15, 15, '#8f8738', 'none', this.x, this.y);
 
 		this.text = text;
 	}

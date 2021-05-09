@@ -3,7 +3,7 @@
 	import Game from '@classes/Event5';
 	import TextPopup from './TextPopup.svelte';
 	import type { Writable } from 'svelte/store';
-	import mSrc from '@assets/music/brokenvessel.mp3';
+	import mSrc from '@assets/music/radiance.mp3';
 	import type { SaveData } from '@data/data';
 
 	const dispatch = createEventDispatcher();

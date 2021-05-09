@@ -175,7 +175,7 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 				this.text.set(c.text);
 				L = true;
 				if (c !== this.checkpoint) {
-					this.checkpoint.sprite.color = '#faef7daa';
+					this.checkpoint.sprite.color = '#8f8738';
 					this.checkpoint = c;
 					this.checkpoint.sprite.color = '#faef7d';
 				}
