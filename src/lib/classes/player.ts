@@ -27,6 +27,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 	imgL: HTMLImageElement[];
 	imgJR: HTMLImageElement;
 	imgJL: HTMLImageElement;
+	imgSR: HTMLImageElement;
+	imgSL: HTMLImageElement;
 
 	allegiance: Alliegance;
 	bulletArr: Bullet[];
@@ -38,6 +40,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		l: HTMLImageElement[],
 		jr: HTMLImageElement,
 		jl: HTMLImageElement,
+		sr: HTMLImageElement,
+		sl: HTMLImageElement,
 		cp: Checkpoint,
 		bulletArr: Bullet[]
 	) {
@@ -49,6 +53,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		this.imgL = l;
 		this.imgJR = jr;
 		this.imgJL = jl;
+		this.imgSR = sr;
+		this.imgSL = sl;
 
 		this.checkpoint = cp;
 		this.checkpoint.sprite.color = '#faef7d';
@@ -91,7 +97,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 					break;
 				case ' ':
 					if (!this.shoot) {
-						if (this.sprite.frames === this.imgR)
+						if (this.sprite.frames === this.imgR) {
+							this.sprite.frames = [this.imgSR];
 							this.bulletArr.push(
 								new Bullet(
 									this.stage,
@@ -102,7 +109,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 									this.bulletArr
 								)
 							);
-						else if (this.sprite.frames === this.imgL)
+						} else if (this.sprite.frames === this.imgL) {
+							this.sprite.frames = [this.imgSL];
 							this.bulletArr.push(
 								new Bullet(
 									this.stage,
@@ -113,6 +121,7 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 									this.bulletArr
 								)
 							);
+						}
 					}
 					this.shoot = true;
 					break;

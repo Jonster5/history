@@ -49,6 +49,16 @@ export class Bullet {
 			this.allegiance !== player.allegiance
 		) {
 			player.healthbar.width -= 5;
+			if (player.healthbar.width < 0) player.healthbar.width = 0;
+
+			if (player.healthbar.width === 0) {
+				player.respawn(this.stage);
+				player.healthbar.width = 15;
+			}
+
+			this.stage.remove(this.sprite);
+			this.arr.splice(this.arr.indexOf(this), 1);
+
 			player.sprite.setFilter('brightness(500%)');
 			setTimeout(() => {
 				player.sprite.setFilter();

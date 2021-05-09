@@ -6,6 +6,8 @@ import r from '@assets/images/GS Static Pose.png';
 import l from '@assets/images/GS Static Pose Left.png';
 import rs from '@assets/images/GS shooting.png';
 import ls from '@assets/images/GS shooting left.png';
+import ars from '@assets/images/american-right-shoot.png';
+import als from '@assets/images/american-left-shoot.png';
 import type { Rectangle } from '@api/rectangle';
 import type { Sprite } from '@api/sprite';
 import bgSrc from '@assets/images/bg2.png';
@@ -77,6 +79,12 @@ pImgJumpRight.src = rjump;
 const pImgJumpLeft = new Image(15, 20);
 pImgJumpLeft.src = ljump;
 
+const pImgShootRight = new Image(15, 20);
+pImgShootRight.src = ars;
+
+const pImgShootLeft = new Image(15, 20);
+pImgShootLeft.src = als;
+
 const eImgRight = [r].map((x) => {
 	const l = new Image(15, 20);
 	l.src = x;
@@ -111,6 +119,8 @@ export default {
 	pImgJumpRight,
 	pImgLeft,
 	pImgJumpLeft,
+	pImgShootLeft,
+	pImgShootRight,
 
 	eImgLeft,
 	eImgRight,

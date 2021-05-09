@@ -63,6 +63,8 @@ export default class extends GameUtils implements GameProperties {
 			lvl.pImgLeft,
 			lvl.pImgJumpRight,
 			lvl.pImgJumpLeft,
+			lvl.pImgShootRight,
+			lvl.pImgShootLeft,
 			lvl.checkpoints[0],
 			this.bullets
 		);

@@ -5,7 +5,7 @@ import { Vec } from '@api/vec';
 import type { Checkpoint } from './checkpoints';
 import type Player from './player';
 import { Rectangle } from '@api/rectangle';
-import type { Bullet } from './bullet';
+import { Bullet } from './bullet';
 
 export default class Enemy extends PlayerUtils implements PlayerProperties {
 	sprite: Sprite;
@@ -59,6 +59,8 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 	}
 
 	update(player: Player) {
+		if (this.healthbar.width === 0) return;
+
 		this.v.add(new Vec(0, 1));
 
 		const dx = this.x - player.x;
@@ -74,6 +76,23 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 					this.sprite.frames = this.imgR;
 
 					this.vx += 2;
+				} else {
+					if (!this.shoot) {
+						this.shoot = true;
+						this.sprite.frames = [this.imgRS];
+
+						this.bulletArr.push(
+							new Bullet(
+								this.stage,
+								this.x,
+								this.y,
+								'right',
+								'axis',
+								this.bulletArr
+							)
+						);
+						setTimeout(() => (this.shoot = false), 500);
+					}
 				}
 			} else {
 				if (Math.abs(dx) < 4 * 20) {
@@ -84,6 +103,23 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 					this.sprite.frames = this.imgL;
 
 					this.vx -= 2;
+				} else {
+					if (!this.shoot) {
+						this.shoot = true;
+						this.sprite.frames = [this.imgLS];
+
+						this.bulletArr.push(
+							new Bullet(
+								this.stage,
+								this.x,
+								this.y,
+								'left',
+								'axis',
+								this.bulletArr
+							)
+						);
+						setTimeout(() => (this.shoot = false), 500);
+					}
 				}
 			}
 		}
