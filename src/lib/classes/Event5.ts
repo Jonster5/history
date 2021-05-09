@@ -79,6 +79,16 @@ export default class extends GameUtils implements GameProperties {
 				lvl.eImgShootLeft,
 				this.bullets,
 				this.enemies
+			),
+			new Enemy(
+				this.stage,
+				{ x: 33 * 20 + 10, y: 2 * 20 + 10 },
+				lvl.eImgRight,
+				lvl.eImgLeft,
+				lvl.eImgShootRight,
+				lvl.eImgShootLeft,
+				this.bullets,
+				this.enemies
 			)
 		);
 

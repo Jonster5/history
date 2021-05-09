@@ -51,7 +51,7 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 		this.eArr = eArr;
 
 		this.sprite = new Sprite(this.imgL, 15, 20, c.x, c.y);
-		this.healthbar = new Rectangle(15, 2, 'lime', 'none', 0, -15);
+		this.healthbar = new Rectangle(15, 2, 'red', 'none', 0, -15);
 
 		this.sprite.add(this.healthbar);
 
@@ -60,6 +60,7 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 
 	update(player: Player) {
 		if (this.healthbar.width === 0) return;
+		if (this.sprite.filter !== 'blur(100%)') return;
 
 		this.v.add(new Vec(0, 1));
 
