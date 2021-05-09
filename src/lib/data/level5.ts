@@ -1,10 +1,11 @@
 import r1 from '@assets/images/american-right1.png';
-
 import rjump from '@assets/images/american-right-jump.png';
 import l1 from '@assets/images/american-left1.png';
-
 import ljump from '@assets/images/american-left-jump.png';
-import eSrc from '@assets/images/door.png';
+import r from '@assets/images/GS Static Pose.png';
+import l from '@assets/images/GS Static Pose Left.png';
+import rs from '@assets/images/GS shooting.png';
+import ls from '@assets/images/GS shooting left.png';
 import type { Rectangle } from '@api/rectangle';
 import type { Sprite } from '@api/sprite';
 import bgSrc from '@assets/images/bg2.png';
@@ -41,14 +42,22 @@ const objects = [
 	new Platform(10, 13, 4, 1, 'sand'),
 	new Platform(13, 12, 3, 1, 'sand'),
 	new Platform(16, 12, 3, 1, 'stone'),
+	new Platform(18, 11, 3, 1, 'stone'),
+	new Platform(20, 10, 2, 1, 'stone'),
+	new Platform(21, 9, 5, 1, 'stone'),
+	new Platform(25, 8, 3, 1, 'stone'),
+
+	new Platform(22, 8, 1, 1, 'bouncy'),
+
+	new Platform(26, 4, 1, 4, 'barrier'),
+	new Platform(26, 3, 9, 1, 'steel'),
+	new Platform(35, 3, 2, 1, 'stone'),
+	new Platform(36, 2, 2, 1, 'stone'),
+
+	new Platform(37, -4, 1, 6, 'barrier'),
 ];
 
 const checkpoints = [new Checkpoint(-25, 18, '')];
-
-const eImg = new Image(20, 20);
-eImg.src = eSrc;
-
-const exit = new Objective(49, -10, eImg);
 
 const pImgRight = [r1].map((x) => {
 	const l = new Image(15, 20);
@@ -68,6 +77,24 @@ pImgJumpRight.src = rjump;
 const pImgJumpLeft = new Image(15, 20);
 pImgJumpLeft.src = ljump;
 
+const eImgRight = [r].map((x) => {
+	const l = new Image(15, 20);
+	l.src = x;
+	return l;
+});
+
+const eImgLeft = [l].map((x) => {
+	const l = new Image(15, 20);
+	l.src = x;
+	return l;
+});
+
+const eImgShootRight = new Image(15, 20);
+eImgShootRight.src = rs;
+
+const eImgShootLeft = new Image(15, 20);
+eImgShootLeft.src = ls;
+
 const background = new Image(2000, 1000);
 background.src = bgSrc;
 2;
@@ -79,12 +106,16 @@ export default {
 	background,
 	objects,
 	checkpoints,
-	exit,
 
 	pImgRight,
 	pImgJumpRight,
 	pImgLeft,
 	pImgJumpLeft,
+
+	eImgLeft,
+	eImgRight,
+	eImgShootLeft,
+	eImgShootRight,
 
 	getSize(): number {
 		return Math.max(this.width * 20, this.height * 20);

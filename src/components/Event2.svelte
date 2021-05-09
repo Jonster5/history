@@ -20,7 +20,7 @@
 		game = new Game(gameElement);
 		text = game.player.text;
 		music.play();
-		music.volume = 0.01;
+		music.volume = 0.3;
 
 		ug = game.gameOver.subscribe((g) => {
 			if (g) {

@@ -17,7 +17,7 @@
 
 	onMount(() => {
 		music.play();
-		music.volume = 0.01;
+		music.volume = 0.3;
 	});
 </script>
 
@@ -41,11 +41,10 @@
 			></button
 		>
 		<button class={completed.e3 ? 'seen' : ''} on:click={() => click('e4')}
-			>Enigma <em>(gameplay)</em></button
+			>Enigma <em>(cutscene)</em></button
 		>
 		<button class={completed.e5 ? 'seen' : ''} on:click={() => click('e5')}
-			>Operation Overlord <em>(gameplay)Enigma <em>(gameplay)</em></em
-			></button
+			>Operation Overlord <em>(gameplay)</em></button
 		>
 		<button class={completed.e6 ? 'seen' : ''} on:click={() => click('e6')}
 			>Battle of Berlin <em>(gameplay)</em></button

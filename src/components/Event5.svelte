@@ -4,6 +4,7 @@
 	import TextPopup from './TextPopup.svelte';
 	import type { Writable } from 'svelte/store';
 	import mSrc from '@assets/music/brokenvessel.mp3';
+	import type { SaveData } from '@data/data';
 
 	const dispatch = createEventDispatcher();
 
@@ -19,8 +20,12 @@
 		game = new Game(gameElement);
 		text = game.player.text;
 		music.play();
-		music.volume = 0.01;
+		music.volume = 0.3;
 		ug = game.gameOver.subscribe((g) => {
+			const c: SaveData = JSON.parse(localStorage.getItem('game'));
+			c.e5 = true;
+			localStorage.setItem('game', JSON.stringify(c));
+
 			if (g) {
 				dispatch('click', {
 					screen: 'play',

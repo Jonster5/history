@@ -58,7 +58,7 @@ export class Sprite
 		this.visible = true;
 		this.children = new Set();
 
-		this.filter = '';
+		this.filter = 'blur(100%)';
 		this.filterTimeout = null;
 	}
 
@@ -187,7 +187,7 @@ export class Sprite
 	}
 
 	setFilter(f?: string, delay?: number) {
-		this.filter = f ?? '';
+		this.filter = f ?? 'blur(100%)';
 		if (delay) {
 			if (this.frameShifter) clearTimeout(this.frameShifter);
 			this.frameShifter = (setTimeout(

@@ -7,6 +7,8 @@ export interface PlayerProperties {
 	stage: Stage;
 }
 
+export type Alliegance = 'allies' | 'axis';
+
 export class PlayerUtils {
 	sprite: Sprite;
 

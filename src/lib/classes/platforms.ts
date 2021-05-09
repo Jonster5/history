@@ -11,6 +11,8 @@ import { Sprite } from '@api/sprite';
 import type { LevelObjectType } from '@utils/levelUtils';
 import type Player from './player';
 import { rectangleCollision } from '@api/collisions';
+import type Enemy from './enemy';
+import type Ally from './ally';
 
 export class Platform {
 	tx: number;
@@ -95,7 +97,7 @@ export class Platform {
 
 		this.points = [xyPoint, whPoint, midPoint];
 	}
-	update(player: Player) {
+	update(player: Player, axis: Enemy[], allies: Ally[]) {
 		const c = rectangleCollision(player.sprite, this, true);
 		switch (this.type) {
 			case 'grass':
@@ -159,5 +161,53 @@ export class Platform {
 					player.v.multiply(0.4).subtract(0, 40);
 				}
 		}
+
+		axis.forEach((a) => {
+			const c = rectangleCollision(a.sprite, this, true);
+			switch (this.type) {
+				case 'grass':
+				case 'sand':
+				case 'wood':
+				case 'steel':
+				case 'dirt':
+					if (c && c !== 'top') {
+						a.v.multiply(0.4);
+
+						if (a.right && !a.left) {
+							a.sprite.frames = a.imgR;
+						}
+						if (a.left && !a.right) {
+							a.sprite.frames = a.imgL;
+						}
+					}
+					break;
+				case 'stone':
+					if (c && (c === 'right' || c === 'left')) {
+						a.sprite.frame = 0;
+					} else if (c && (c === 'top' || c === 'bottom')) {
+						a.v.multiply(0.4);
+						if (a.right && !a.left) {
+							a.sprite.frames = a.imgR;
+						}
+						if (a.left && !a.right) {
+							a.sprite.frames = a.imgL;
+						}
+					}
+					break;
+				case 'barrier':
+					break;
+				case 'bouncy':
+					if (c) {
+						a.jump = true;
+						if (a.vx > 0) {
+							a.sprite.frames = a.imgR;
+						} else {
+							a.sprite.frames = a.imgL;
+						}
+						a.v.multiply(0.4).subtract(0, 40);
+					}
+					break;
+			}
+		});
 	}
 }

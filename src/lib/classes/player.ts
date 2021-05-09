@@ -1,15 +1,18 @@
 import { Sprite } from '@api/sprite';
 import type { Stage } from '@api/stage';
-import { PlayerUtils, PlayerProperties } from '@utils/playerUtils';
+import { PlayerUtils, PlayerProperties, Alliegance } from '@utils/playerUtils';
 import { Vec } from '@api/vec';
 import { rectangleCollision, RectHitbox } from '@api/collisions';
 import type { Checkpoint } from './checkpoints';
 import type { Platform } from './platforms';
 import { writable, Writable } from 'svelte/store';
+import { Rectangle } from '@api/rectangle';
+import { Bullet } from './bullet';
 
 export default class Player extends PlayerUtils implements PlayerProperties {
 	sprite: Sprite;
 	stage: Stage;
+	healthbar: Rectangle;
 
 	left: boolean;
 	right: boolean;
@@ -25,6 +28,9 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 	imgJR: HTMLImageElement;
 	imgJL: HTMLImageElement;
 
+	allegiance: Alliegance;
+	bulletArr: Bullet[];
+
 	constructor(
 		stage: Stage,
 		c: { x: number; y: number },
@@ -32,7 +38,8 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		l: HTMLImageElement[],
 		jr: HTMLImageElement,
 		jl: HTMLImageElement,
-		cp: Checkpoint
+		cp: Checkpoint,
+		bulletArr: Bullet[]
 	) {
 		super();
 
@@ -48,7 +55,13 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 		this.text = writable('');
 
 		this.sprite = new Sprite(this.imgR, 15, 20, c.x, c.y);
+		this.healthbar = new Rectangle(15, 2, 'lime', 'none', 0, -15);
+
+		this.sprite.add(this.healthbar);
 		this.stage.add(this.sprite);
+
+		this.allegiance = 'allies';
+		this.bulletArr = bulletArr;
 
 		window.addEventListener('keydown', (e) => {
 			switch (e.key) {
@@ -77,6 +90,30 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 					else this.sprite.frames = [this.imgJL];
 					break;
 				case ' ':
+					if (!this.shoot) {
+						if (this.sprite.frames === this.imgR)
+							this.bulletArr.push(
+								new Bullet(
+									this.stage,
+									this.x,
+									this.y,
+									'right',
+									'allies',
+									this.bulletArr
+								)
+							);
+						else if (this.sprite.frames === this.imgL)
+							this.bulletArr.push(
+								new Bullet(
+									this.stage,
+									this.x,
+									this.y,
+									'left',
+									'allies',
+									this.bulletArr
+								)
+							);
+					}
 					this.shoot = true;
 					break;
 			}

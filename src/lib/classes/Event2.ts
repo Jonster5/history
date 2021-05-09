@@ -12,6 +12,9 @@ import { rectangleCollision } from '@api/collisions';
 import type { Objective } from './objective';
 import type { SaveData } from '@data/data';
 import { writable, Writable } from 'svelte/store';
+import type { Bullet } from './bullet';
+import type Enemy from './enemy';
+import type Ally from './ally';
 
 export default class extends GameUtils implements GameProperties {
 	canvas: Canvas;
@@ -23,6 +26,10 @@ export default class extends GameUtils implements GameProperties {
 	checkpoints: Checkpoint[];
 	pause: boolean;
 	objective: Objective;
+	enemies: Enemy[];
+	allies: Ally[];
+
+	bullets: Bullet[];
 
 	gameOver: Writable<boolean>;
 
@@ -51,6 +58,10 @@ export default class extends GameUtils implements GameProperties {
 			this.objective.sprite
 		);
 
+		this.bullets = [];
+		this.enemies = [];
+		this.allies = [];
+
 		this.player = new Player(
 			this.stage,
 			{ x: -48 * 20 + 10, y: 19 * 20 + 10 },
@@ -58,14 +69,17 @@ export default class extends GameUtils implements GameProperties {
 			lvl.pImgLeft,
 			lvl.pImgJumpRight,
 			lvl.pImgJumpLeft,
-			lvl.checkpoints[0]
+			lvl.checkpoints[0],
+			this.bullets
 		);
 
 		this.canvas.update = () => {
 			if (this.pause) return;
 			this.player.update(this.checkpoints);
 
-			this.objects.forEach((o) => o.update(this.player));
+			this.objects.forEach((o) =>
+				o.update(this.player, this.enemies, this.allies)
+			);
 
 			if (
 				rectangleCollision(
@@ -81,6 +95,9 @@ export default class extends GameUtils implements GameProperties {
 				localStorage.setItem('game', JSON.stringify(c));
 				this.gameOver.set(true);
 			}
+			this.bullets.forEach((b) => {
+				b.update(this.player, this.objects, this.enemies, this.allies);
+			});
 
 			if (this.player.y > this.stage.halfHeight) {
 				this.player.respawn(this.stage);

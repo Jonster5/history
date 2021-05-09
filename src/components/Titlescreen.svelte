@@ -14,7 +14,7 @@
 
 	onMount(() => {
 		music.play();
-		music.volume = 0.01;
+		music.volume = 0.3;
 	});
 </script>
 

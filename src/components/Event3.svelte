@@ -12,7 +12,7 @@
 	});
 </script>
 
-<video width="1600" height="900" autoplay>
+<video width="1600" height="900" autoplay loop>
 	<source src={vsrc} type="video/mp4" />
 	<track kind="captions" />
 	Your browser does not support the video tag.

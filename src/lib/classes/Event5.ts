@@ -6,10 +6,10 @@ import { Sprite } from '@api/sprite';
 import Player from './player';
 import type { Checkpoint } from './checkpoints';
 import type { Platform } from './platforms';
-import { rectangleCollision } from '@api/collisions';
-import type { Objective } from './objective';
-import type { SaveData } from '@data/data';
 import { writable, Writable } from 'svelte/store';
+import Enemy from './enemy';
+import type Ally from './ally';
+import type { Bullet } from './bullet';
 
 export default class extends GameUtils implements GameProperties {
 	canvas: Canvas;
@@ -20,7 +20,11 @@ export default class extends GameUtils implements GameProperties {
 	objects: Platform[];
 	checkpoints: Checkpoint[];
 	pause: boolean;
-	objective: Objective;
+
+	enemies: Enemy[];
+	allies: Ally[];
+
+	bullets: Bullet[];
 
 	gameOver: Writable<boolean>;
 
@@ -38,16 +42,19 @@ export default class extends GameUtils implements GameProperties {
 
 		this.objects = [...lvl.objects];
 		this.checkpoints = [...lvl.checkpoints];
-		this.objective = lvl.exit;
+		this.bullets = [];
 
 		this.gameOver = writable(false);
 
 		this.stage.add(
 			this.background,
 			...lvl.getSprites(),
-			...lvl.getCheckpoints(),
-			this.objective.sprite
+			...lvl.getCheckpoints()
 		);
+
+		this.allies = [];
+		this.bullets = [];
+		this.enemies = [];
 
 		this.player = new Player(
 			this.stage,
@@ -56,33 +63,43 @@ export default class extends GameUtils implements GameProperties {
 			lvl.pImgLeft,
 			lvl.pImgJumpRight,
 			lvl.pImgJumpLeft,
-			lvl.checkpoints[0]
+			lvl.checkpoints[0],
+			this.bullets
+		);
+
+		this.enemies.push(
+			new Enemy(
+				this.stage,
+				{ x: 32 * 20 + 10, y: 2 * 20 + 10 },
+				lvl.eImgRight,
+				lvl.eImgLeft,
+				lvl.eImgShootRight,
+				lvl.eImgShootLeft,
+				this.bullets,
+				this.enemies
+			)
 		);
 
 		this.canvas.update = () => {
 			if (this.pause) return;
+			if (this.enemies.length < 1)
+				setTimeout(() => this.gameOver.set(true), 1000);
 			this.player.update(this.checkpoints);
 
-			this.objects.forEach((o) => o.update(this.player));
+			this.objects.forEach((o) =>
+				o.update(this.player, this.enemies, this.allies)
+			);
 
-			if (
-				rectangleCollision(
-					this.player.sprite,
-					this.objective.sprite,
-					false
-				)
-			) {
-				const c: SaveData = JSON.parse(localStorage.getItem('game'));
-
-				c.e5 = true;
-
-				localStorage.setItem('game', JSON.stringify(c));
-				this.gameOver.set(true);
-			}
+			this.enemies.forEach((e) => e.update(this.player));
+			this.allies.forEach((a) => a.update(this.player));
 
 			if (this.player.y > this.stage.halfHeight) {
 				this.player.respawn(this.stage);
 			}
+
+			this.bullets.forEach((b) => {
+				b.update(this.player, this.objects, this.enemies, this.allies);
+			});
 
 			this.stage.x = -this.player.x;
 			this.stage.y = -this.player.y;

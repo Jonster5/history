@@ -12,7 +12,7 @@
 
 		setTimeout(() => {
 			show = true;
-		}, 8000);
+		}, 30000);
 	});
 </script>
 
