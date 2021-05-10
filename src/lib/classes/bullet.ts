@@ -66,7 +66,7 @@ export class Bullet {
 		}
 
 		objects.forEach((o) => {
-			if (rectangleCollision(this.sprite, o)) {
+			if (rectangleCollision(this.sprite, o) && o.type !== 'bouncy') {
 				try {
 					this.stage.remove(this.sprite);
 					this.arr.splice(this.arr.indexOf(this), 1);
