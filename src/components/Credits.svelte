@@ -19,6 +19,7 @@
 
 <main>
 	<Backbutton target="title" on:click />
+
 	<div>Project assigned by: <em>Mr. Walsh</em></div>
 </main>
 

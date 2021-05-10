@@ -76,13 +76,13 @@ eImg.src = eSrc;
 
 const exit = new Objective(39, 1, eImg);
 
-const pImgRight = [r1, r2, r3].map((x) => {
+const pImgRight = [r1].map((x) => {
 	const l = new Image(15, 20);
 	l.src = x;
 	return l;
 });
 
-const pImgLeft = [l1, l2, l3].map((x) => {
+const pImgLeft = [l1].map((x) => {
 	const l = new Image(15, 20);
 	l.src = x;
 	return l;

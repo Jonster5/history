@@ -127,24 +127,10 @@ export default class extends GameUtils implements GameProperties {
 		};
 
 		window.addEventListener('keydown', (e) => {
-			if (e.key === 'v') {
-				this.player.checkpoint = this.checkpoints[
-					this.checkpoints.length - 1
-				];
-				this.player.respawn(this.stage);
-			} else if (e.key === '1') {
-				this.stage.add(...lvl.getPoints());
-			} else if (e.key === '2') {
-				this.stage.remove(...lvl.getPoints());
-			} else if (e.key === '3') {
+			if (e.key === '1') {
 				this.canvas.size(lvl.getSize());
-			} else if (e.key === '4') {
+			} else if (e.key === '2') {
 				this.canvas.size(600);
-			} else if (e.key === '5') {
-				this.player.sprite.setFilter('brightness(500%)');
-				setTimeout(() => {
-					this.player.sprite.setFilter();
-				}, 200);
 			}
 		});
 
