@@ -123,6 +123,20 @@ export default class Enemy extends PlayerUtils implements PlayerProperties {
 					}
 				}
 			}
+		} else {
+			if (Math.random() < 0.02) {
+				if (this.sprite.frames === this.imgR) {
+					this.sprite.frames = this.imgL;
+
+					this.vx += Math.random() * 4;
+					setTimeout(() => (this.vx = 0), 1000);
+				} else if (this.sprite.frames === this.imgL) {
+					this.sprite.frames = this.imgR;
+
+					this.vx += Math.random() * -4;
+					setTimeout(() => (this.vx = 0), 1000);
+				}
+			}
 		}
 
 		if (this.right) {

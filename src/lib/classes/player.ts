@@ -97,7 +97,10 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 					break;
 				case ' ':
 					if (!this.shoot) {
-						if (this.sprite.frames === this.imgR) {
+						if (
+							this.sprite.frames === this.imgR ||
+							this.sprite.frames[0] === this.imgSR
+						) {
 							this.sprite.frames = [this.imgSR];
 							this.bulletArr.push(
 								new Bullet(
@@ -109,7 +112,10 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 									this.bulletArr
 								)
 							);
-						} else if (this.sprite.frames === this.imgL) {
+						} else if (
+							this.sprite.frames === this.imgL ||
+							this.sprite.frames[0] === this.imgSL
+						) {
 							this.sprite.frames = [this.imgSL];
 							this.bulletArr.push(
 								new Bullet(
@@ -122,8 +128,9 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 								)
 							);
 						}
+						this.shoot = true;
+						setTimeout(() => (this.shoot = false), 300);
 					}
-					this.shoot = true;
 					break;
 			}
 		});
@@ -141,7 +148,6 @@ export default class Player extends PlayerUtils implements PlayerProperties {
 					this.sprite.stop();
 					break;
 				case ' ':
-					this.shoot = false;
 					break;
 			}
 		});
