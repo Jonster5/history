@@ -29,11 +29,15 @@ export default class extends GameUtils implements GameProperties {
 	enemies: Enemy[];
 	allies: Ally[];
 
+    timeW: Writable<number>;
+    time: number;
+    timeU: () => void;
+
 	bullets: Bullet[];
 
 	gameOver: Writable<boolean>;
 
-	constructor(target: HTMLElement) {
+	constructor(target: HTMLElement, timer: Writable<number>) {
 		super();
 
 		this.canvas = new Canvas(target, 600);
@@ -43,7 +47,11 @@ export default class extends GameUtils implements GameProperties {
 		this.canvas.add(this.stage);
 
 		this.background = new Sprite([lvl.background], ...lvl.getDims());
-		this.background.coords.set(0, 0);
+        this.background.coords.set(0, 0);
+        
+        this.time = 0;
+        this.timeW = timer;
+        this.timeU = this.timeW.subscribe((v) => this.time = v);
 
 		this.objects = [...lvl.objects];
 		this.checkpoints = [...lvl.checkpoints];

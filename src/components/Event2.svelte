@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import Game from '@classes/Event2';
-	import TextPopup from './TextPopup.svelte';
+    import TextPopup from './TextPopup.svelte';
+    import Timer from './Timer.svelte';
 	import type { Writable } from 'svelte/store';
 	import mSrc from '@assets/music/falseknight.mp3';
 
@@ -10,14 +11,15 @@
 	let gameElement: HTMLElement;
 
 	let game: Game;
-	let text: Writable<string>;
+    let text: Writable<string>;
+    let gtimer: Writable<number>;
 
 	let music: HTMLAudioElement;
 
 	let ug: () => void;
 
 	onMount(() => {
-		game = new Game(gameElement);
+		game = new Game(gameElement, gtimer);
 		text = game.player.text;
 		music.play();
 		music.volume = 0.3;
@@ -46,6 +48,8 @@
 </audio>
 
 <main class="game" bind:this={gameElement} />
+
+<Timer bind:count={gtimer} />
 
 {#if $text}
 	<TextPopup text={$text} />

@@ -1,0 +1,4 @@
+vscode:
+  extensions:
+    - svelte.svelte-vscode@104.12.2:de32b6134a91e0a87ee8f346883f82ef
+    - esbenp.prettier-vscode@6.4.0:951c840b4441f6eb0171a511ccec96ee
